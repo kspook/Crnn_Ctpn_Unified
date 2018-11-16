@@ -1,19 +1,30 @@
-'''
-360万中文训练集标签修改
-'''
+#'''
+#360万中文训练集标签修改
+#'''
 
-with open('../char_std_5990.txt', 'rb') as file:
+with open('../256.txt', 'rb')as file:
+#with open('../256-common-hangul.txt', 'rb')as file:
+#with open('../char_std_5990.txt', 'rb') as file:
 	char_dict = {num : char.strip().decode('gbk','ignore') for num, char in enumerate(file.readlines())}
 
-with open('../test.txt') as file:
-	value_list = ['%s %s'%(segment_list.split(' ')[0], ''.join([char_dict[int(val)] for val in segment_list[:-1].split(' ')[1:]])) for segment_list in file.readlines()]
+#with open('../labels-map3.csv') as file:
+#	value_list = ['%s %s'%(segment_list.split(' ')[0], ''.join([char_dict[int(val)] for val in segment_list[:-1].split(' ')[1:]])) for segment_list in file.readlines()]
+
+value_list = []
+with open('../labels-map3.csv') as file:
+ 	label_list = file.readlines()
+ 	for segment_list in label_list:
+ 		key = segment_list.split(' ')[0]
+ 		segment_list = segment_list[:-1].split(' ')[1:]
+ 		temp = [char_dict[int(val)] for val in segment_list]
+ 		value_list.append('%s %s'%(key, ''.join(temp)))
 
 with open('1.txt', 'w', encoding='utf-8') as file:
 	[ file.write(val+'\n') for val in value_list]
 
-'''
-orginal version
-'''
+#'''
+#orginal version
+#'''
 
 # with open('../char_std_5990.txt', 'rb') as file:
 # 	char_dict = {num : char.strip().decode('gbk','ignore') for num, char in enumerate(file.readlines())}

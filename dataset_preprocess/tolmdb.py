@@ -5,7 +5,7 @@ import re
 from PIL import Image
 import numpy as np
 import imghdr
-
+import sys
 import argparse
 parser = argparse.ArgumentParser()
 parser.add_argument('--data_txt', type=str, default='', help='name and labels of your training set')
@@ -94,7 +94,13 @@ if __name__ == '__main__':
     
     labelList = []
     for line in imagePathList:
-        word = line.split()[1]
+    	line = line.strip().strip('\n')
+    	# Ensure that you are not working on empty line
+    	if line:
+        	word  = line.split(",") 
+    	# Ensure that index is not out of range
+    	if len(data) > 1: print data[1]
+        word = line.split(",")[1]
         print(word)
         #print(word)
         labelList.append(word)

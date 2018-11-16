@@ -100,6 +100,7 @@ def training():
         train_iter = iter(train_loader)
         i = 0
         print(len(train_loader))
+        print ("length train loader")
         while i < len(train_loader):
             for p in crnn.parameters():
                 p.requires_grad = True
@@ -131,25 +132,26 @@ if __name__ == '__main__':
         sampler = dataset.randomSequentialSampler(train_dataset, params.batchSize)
     else:
         sampler = None
-
+    print("read train set")
     # images will be resize to 32*100
     train_loader = torch.utils.data.DataLoader(
         train_dataset, batch_size=params.batchSize,
         shuffle=True, sampler=sampler,
         num_workers=int(params.workers),
         collate_fn=dataset.alignCollate(imgH=params.imgH, imgW=params.imgW, keep_ratio=params.keep_ratio))
-
+    print(train_loader)
+    print("read test set")
     # read test set
     # images will be resize to 32*100
     test_dataset = dataset.lmdbDataset(
         root=opt.valroot, transform=dataset.resizeNormalize((256, 32)))
-
+    print("test data set")
     nclass = len(params.alphabet) + 1
     nc = 1
 
     converter = utils.strLabelConverter(params.alphabet)
     criterion = CTCLoss()
-
+    print("cnn and rnn") 
     # cnn and rnn
     image = torch.FloatTensor(params.batchSize, 3, params.imgH, params.imgH)
     text = torch.IntTensor(params.batchSize * 5)
@@ -169,7 +171,7 @@ if __name__ == '__main__':
     image = Variable(image)
     text = Variable(text)
     length = Variable(length)
-
+    print ("loss averager")
     # loss averager
     loss_avg = utils.averager()
 
